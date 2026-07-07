@@ -10,7 +10,7 @@ function App() {
   const [sources, setSources] = useState([]);
   const [loading, setLoading] = useState(false);
   const [backendStatus, setBackendStatus] = useState("Checking...");
-  const [provider, setProvider] = useState("ollama");
+  const [provider, setProvider] = useState("gemini");
   const [displayedAnswer,setDisplayedAnswer]=useState("");
   const [summary,setSummary]=useState(null);
   const [relatedQuestions, setRelatedQuestions] = useState([]);
@@ -103,7 +103,24 @@ useEffect(() => {
       setSources(res.data.sources || []);
       setSummary(res.data.summary);
       setRelatedQuestions(res.data.related_questions || []);
-       
+       const newItem = {
+  id: Date.now(),
+  question,
+  answer: res.data.answer,
+  confidence: res.data.confidence,
+  sources: res.data.sources || [],
+  summary: res.data.summary,
+  relatedQuestions: res.data.related_questions || [],
+};
+
+setHistory(prev => {
+    const updated = [newItem, ...prev];
+    localStorage.setItem(
+        "veritas-history",
+        JSON.stringify(updated)
+    );
+    return updated;
+});
       console.log(sources);
     } catch (err) {
       console.error(err);
@@ -155,8 +172,10 @@ useEffect(() => {
     value={provider}
     onChange={(e) => setProvider(e.target.value)}
   >
-    <option value="ollama">🧠 Ollama (Local)</option>
     <option value="gemini">✨ Gemini API</option>
+    <option value="ollama">🧠 Ollama (Local)</option>
+    <option value="groq">🐎Groq</option>
+    
   </select>
 
 </div>

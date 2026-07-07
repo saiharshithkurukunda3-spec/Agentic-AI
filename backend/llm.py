@@ -2,9 +2,10 @@ import os
 import ollama
 import google.generativeai as genai
 from dotenv import load_dotenv
-
+from groq import Groq
 load_dotenv()
-
+print("OPENROUTER:", os.getenv("OPENROUTER_API_KEY"))
+from openai import OpenAI
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 PROMPT_TEMPLATE = """
@@ -118,6 +119,33 @@ def ask_gemini(question, context):
     return response.text
 
 
+
+def ask_groq(question, context):
+
+    prompt = PROMPT_TEMPLATE.format(
+        question=question,
+        context=context
+    )
+
+    client = Groq(
+        api_key=os.getenv("GROQ_API_KEY")
+    )
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0.2,
+        max_tokens=1200
+    )
+
+    return response.choices[0].message.content
+
+
 def ask_llm(provider, question, context):
 
     if provider == "ollama":
@@ -125,6 +153,9 @@ def ask_llm(provider, question, context):
 
     elif provider == "gemini":
         return ask_gemini(question, context)
+
+    elif provider == "groq":
+        return ask_groq(question, context)
 
     else:
         raise ValueError("Invalid provider")

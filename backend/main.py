@@ -171,11 +171,14 @@ def ask(request: QuestionRequest):
 
     elapsed = round(time.time() - start_time, 2)
 
-    engine = (
-        "Ollama"
-        if request.provider == "ollama"
-        else "Gemini 2.5 Flash"
-    )
+    if request.provider == "ollama":
+       engine = "Ollama"
+    elif request.provider == "gemini":
+       engine = "Gemini 2.5 Flash"
+    elif request.provider == "groq":
+        engine = "Groq Llama 3.3 70B"
+    else:
+        engine = "Unknown"
     print(f"TOTAL: {time.time()-start_time:.2f}s")
     return {
 
