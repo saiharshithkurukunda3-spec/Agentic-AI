@@ -411,6 +411,91 @@ The frontend can then communicate with the local backend without any additional 
 
 ---
 
+
+# Running with Ollama (Unlimited Local Inference)
+
+VERITAS AI supports **Ollama** as a local Large Language Model provider.
+
+Using Ollama allows you to run the application without relying on paid cloud APIs, making it suitable for unlimited local experimentation (subject to your computer's hardware resources).
+
+## 1. Install Ollama
+
+Download and install Ollama from:
+
+https://ollama.com/download
+
+Verify the installation:
+
+```bash
+ollama --version
+```
+
+---
+
+## 2. Pull the Required Model
+
+VERITAS AI is configured to use:
+
+```bash
+ollama pull qwen2.5:3b
+```
+
+If you wish to use another model, update the model name inside `backend/llm.py`.
+
+Examples:
+
+```bash
+ollama pull llama3.2:3b
+```
+
+```bash
+ollama pull gemma3:4b
+```
+
+```bash
+ollama pull mistral:7b
+```
+
+---
+
+## 3. Start the Ollama Server
+
+Before running the backend, start the Ollama service.
+
+On most systems:
+
+```bash
+ollama serve
+```
+
+Leave this terminal running.
+
+---
+
+## 4. Select Ollama in VERITAS AI
+
+When sending requests to the backend, set the provider to:
+
+```json
+{
+    "question": "Explain Quantum Computing",
+    "provider": "ollama"
+}
+```
+
+---
+
+## Why Use Ollama?
+
+- ✅ No API usage charges
+- ✅ No daily request limits
+- ✅ Unlimited local inference
+- ✅ Better privacy since data stays on your machine
+- ✅ Works offline after the model has been downloaded
+
+> **Note:** Performance depends on your system specifications. Larger models require more RAM and CPU/GPU resources.
+
+
 # Author
 
 ## Sai Harshith
