@@ -45,7 +45,7 @@ def ask(request: QuestionRequest):
     docs = results["documents"]
     distances = results["distances"]
     metadata = results["metadatas"]
-    scores = results["scores"]
+    scores = [1 - d for d in distances]
 
     # Nothing retrieved
     if not docs:

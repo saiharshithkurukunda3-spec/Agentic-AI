@@ -14,7 +14,7 @@ TRUSTED_DOMAINS = {
 def search_web(query: str):
     with DDGS() as ddgs:
 
-        results = list(ddgs.text(query, max_results=7))
+        results = list(ddgs.text(query, max_results=5))
 
         formatted_results = []
 

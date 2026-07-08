@@ -48,35 +48,24 @@ def store_chunks(chunks, embeddings, metadata_list):
 def search_chunks(query_embedding, top_k=10):
 
     results = collection.query(
-
         query_embeddings=[query_embedding.tolist()],
-
         n_results=top_k,
-
         include=[
-
             "documents",
-
             "distances",
-
             "metadatas"
-
         ]
-
     )
 
     documents = results["documents"][0]
-
     distances = results["distances"][0]
-
     metadatas = results["metadatas"][0]
 
+    scores = [1 - d for d in distances]   # convert distance to similarity
+
     return {
-
         "documents": documents,
-
         "distances": distances,
-
-        "metadatas": metadatas
-
+        "metadatas": metadatas,
+        "scores": scores
     }
